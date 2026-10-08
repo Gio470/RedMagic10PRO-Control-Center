@@ -148,12 +148,6 @@ The Kotlin namespace is `com.elitedarkkaiser.redmagic` while the application id 
 
 ---
 
-## 💬 Discussion
-
-- Telegram: [@RedMagic10Pro](https://t.me/redmagic10prochat)
-
----
-
 ## 🙏 Credits
 
 This app stands on a lot of other people's work.
