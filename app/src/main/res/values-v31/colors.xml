@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Material You for the icon's *background*. system_accent1_* are public
+      framework colours derived from the user's wallpaper, so the launcher
+      resolves this to a tint of their current palette rather than a fixed brand
+      colour. Tone 800 is a dark one, which keeps the artwork's white sticker
+      outline reading the way it does on the original black backdrop.
+
+      This is what the icon shows with themed icons OFF. With themed icons ON the
+      launcher ignores background and foreground entirely and tints the
+      monochrome layer itself.
+    -->
+    <color name="ic_launcher_background">@android:color/system_accent1_800</color>
+</resources>

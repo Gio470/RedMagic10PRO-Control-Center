@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <queries>
+        <!-- Find installed HOME apps for third-party launcher recent-task hiding. -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <!-- The theme intents an icon pack declares, so the Xposed tab can list installed packs. -->
+        <intent>
+            <action android:name="org.adw.launcher.THEMES" />
+        </intent>
+        <intent>
+            <action android:name="org.adw.ActivityStarter.THEMES" />
+        </intent>
+        <intent>
+            <action android:name="com.novalauncher.THEME" />
+        </intent>
+        <intent>
+            <action android:name="com.gau.go.launcherex.theme" />
+        </intent>
+        <intent>
+            <action android:name="com.anddoes.launcher.THEME" />
+        </intent>
+    </queries>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- Draws the saved L/R trigger targets over the running game (game trigger mapping). -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <application
+        android:name=".RedMagicApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="RedMagic Control"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RedMagicRootControl">
+
+        <!--
+            The app doubles as an Xposed module carrying the RedMagicOS floating-window fixes
+            (ported from github.com/Gio470/FixRedMagicWindow). These entries are inert unless an
+            Xposed framework is present and the module has been enabled in it, so a device without
+            one is unaffected.
+        -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="@string/xposed_description" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="93" />
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|keyboardHidden|density|screenSize|smallestScreenSize|screenLayout|assetsPaths">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Its own window: the playground's pinch and rotate gestures want the whole screen,
+             and it records a backdrop layer of its own to refract. -->
+        <activity
+            android:name=".GlassPlaygroundActivity"
+            android:exported="false"
+            android:label="Glass playground"
+            android:configChanges="orientation|keyboardHidden|density|screenSize|smallestScreenSize|screenLayout|assetsPaths" />
+
+        <!-- Full-screen placement of the L/R trigger targets; handles its own rotation so the
+             pucks stay put as the user turns the phone to set each orientation's mapping. -->
+        <activity
+            android:name=".gametrigger.TriggerEditorActivity"
+            android:exported="false"
+            android:label="Place trigger targets"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|density|screenSize|smallestScreenSize|screenLayout" />
+
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_UNLOCKED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".TriggerAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <service
+            android:name=".AutoFanService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".FanLedService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".AutoPumpService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+    
+        <service android:name=".TriggerRootService" android:exported="false" />
+
+        <service android:name=".gametrigger.TriggerEditorService"
+            android:exported="false" android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-controlled placement of shoulder-trigger targets over a selected game" />
+        </service>
+
+        <service android:name=".gametrigger.TriggerRuntimeService"
+            android:exported="false" android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-enabled shoulder-trigger mapping with root foreground detection while games run" />
+        </service>
+
+        <service android:name=".GameModeService" android:exported="false" />
+
+        <service android:name=".ChargingModeService" android:exported="false" />
+
+        <service android:name=".CallLightingService" android:exported="false" />
+
+
+
+
+
+        <receiver
+            android:name=".CallLightingReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xposed scope: system_server for the bundled window-fix module, plus GameAssist and
+         GameSpace for the GameAssist tweaks (ported from NubiaToolkit). Listing them here is what
+         makes LSPosed show them as "Requested by this module" on the scope screen instead of
+         requiring the user to find and check them by hand. -->
+    <string-array name="xposed_scope">
+        <item>android</item>
+        <item>cn.nubia.gameassist</item>
+        <item>cn.nubia.gamelauncher</item>
+        <!-- Icon pack replacement happens inside whichever app is drawing the icon, so every
+             surface that shows one has to be in scope: the launcher first, then the places that
+             list apps. -->
+        <item>com.zte.mifavor.launcher</item>
+        <item>com.android.launcher3</item>
+        <item>com.android.systemui</item>
+        <item>com.android.settings</item>
+        <item>com.android.intentresolver</item>
+        <item>com.android.permissioncontroller</item>
+    </string-array>
+</resources>

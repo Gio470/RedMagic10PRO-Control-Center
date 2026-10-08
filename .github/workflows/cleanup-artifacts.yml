@@ -1,0 +1,94 @@
+name: Clean up Actions storage
+
+# Deleting artifacts and caches is not something every context is allowed to do -- an agent
+# session working on this repo is refused outright by its proxy, and the web UI only offers one
+# artifact at a time. A workflow runs inside Actions with the repository's own token, which is the
+# one place the delete endpoints are reachable in bulk.
+#
+# Run it by hand from the Actions tab when storage is full, or leave the schedule to keep it from
+# filling again.
+
+on:
+  workflow_dispatch:
+    inputs:
+      keep_days:
+        description: "Keep artifacts newer than this many days (0 deletes everything)"
+        required: false
+        default: "7"
+  schedule:
+    # Weekly, early Monday UTC.
+    - cron: "0 4 * * 1"
+
+permissions:
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const keepDays = Number(context.payload.inputs?.keep_days ?? 7);
+            const cutoff = Date.now() - keepDays * 24 * 60 * 60 * 1000;
+
+            const artifacts = await github.paginate(
+              github.rest.actions.listArtifactsForRepo,
+              { owner: context.repo.owner, repo: context.repo.repo, per_page: 100 }
+            );
+
+            let deleted = 0, freed = 0, kept = 0;
+            for (const artifact of artifacts) {
+              if (artifact.expired) { continue; }
+              if (Date.parse(artifact.created_at) >= cutoff) { kept++; continue; }
+              try {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: artifact.id,
+                });
+                deleted++;
+                freed += artifact.size_in_bytes;
+              } catch (error) {
+                core.warning(`Could not delete ${artifact.name} (${artifact.id}): ${error.message}`);
+              }
+            }
+
+            const mb = (freed / 1048576).toFixed(0);
+            core.summary
+              .addHeading("Artifacts")
+              .addRaw(`Deleted ${deleted}, kept ${kept} newer than ${keepDays} day(s). Freed ${mb} MB.`)
+              .write();
+            core.info(`Deleted ${deleted} artifacts, freed ${mb} MB, kept ${kept}.`);
+
+      - name: Delete Actions caches
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const caches = await github.paginate(
+              github.rest.actions.getActionsCacheList,
+              { owner: context.repo.owner, repo: context.repo.repo, per_page: 100 }
+            );
+
+            let deleted = 0, freed = 0;
+            for (const entry of caches) {
+              try {
+                await github.rest.actions.deleteActionsCacheById({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  cache_id: entry.id,
+                });
+                deleted++;
+                freed += entry.size_in_bytes;
+              } catch (error) {
+                core.warning(`Could not delete cache ${entry.key}: ${error.message}`);
+              }
+            }
+
+            const mb = (freed / 1048576).toFixed(0);
+            core.summary
+              .addHeading("Caches")
+              .addRaw(`Deleted ${deleted} cache entries, freed ${mb} MB.`)
+              .write();
+            core.info(`Deleted ${deleted} caches, freed ${mb} MB.`);

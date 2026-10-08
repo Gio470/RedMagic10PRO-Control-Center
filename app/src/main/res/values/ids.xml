@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tag key for the one switch on a screen that turns its whole feature on and off, so the
+         card that opens that screen can mirror it. See ui/M3.kt's MasterSwitch. -->
+    <item name="master_switch" type="id" />
+    <!-- Tag key for the list a page scrolls under the back bar and the navigation bar. See
+         ui/M3Dialog.kt's scrollsUnderBar. -->
+    <item name="page_scroller" type="id" />
+</resources>

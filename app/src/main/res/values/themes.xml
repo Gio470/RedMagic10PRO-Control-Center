@@ -1,0 +1,53 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+        The UI is hand-drawn (no XML layouts/Compose), so this theme's only job is to hand
+        MaterialColors.getColor(...) a real Material 3 / Material You color scheme to sample
+        from at runtime. This is the light half; values-night/themes.xml carries the dark one,
+        and the DayNight parent is what lets the system setting pick between them.
+        RedMagicApplication applies dynamic (wallpaper-derived) colors on top when the device
+        supports it (Android 12+), else these seed tones are used.
+    -->
+    <style name="Theme.RedMagicRootControl" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#3F5A7D</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#D3E3FF</item>
+        <item name="colorOnPrimaryContainer">#17293F</item>
+        <item name="colorSecondaryContainer">#DBE3F1</item>
+        <item name="colorOnSecondaryContainer">#182633</item>
+        <item name="colorSurface">#F7F9FC</item>
+        <item name="colorOnSurface">#171C22</item>
+        <item name="colorOnSurfaceVariant">#48525F</item>
+        <item name="colorSurfaceContainerLow">#EDF1F7</item>
+        <item name="colorSurfaceContainer">#E3E9F1</item>
+        <item name="colorSurfaceContainerHigh">#DBE2EC</item>
+        <item name="colorSurfaceContainerHighest">#D3DBE7</item>
+        <item name="colorOutline">#737C88</item>
+        <item name="colorOutlineVariant">#BCC5D1</item>
+        <item name="colorError">#BA1A1A</item>
+        <item name="colorErrorContainer">#FFDAD6</item>
+        <item name="colorOnErrorContainer">#410002</item>
+        <item name="android:windowBackground">#F7F9FC</item>
+        <!--
+            The window runs edge to edge with the status bar hidden (MainActivity.applyFullScreen),
+            so the bars must not paint anything of their own: an opaque navigation bar colour would
+            draw a strip back over content that is now meant to flow underneath it, and the system's
+            automatic contrast scrims would do the same in a lighter shade.
+        -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Light surfaces need dark system-bar icons; values-night sets these the other way. -->
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <!-- Use the full panel on a cutout device rather than letterboxing below it; the content
+             pads itself by the cutout inset so nothing lands under the camera. -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="27">shortEdges</item>
+        <!-- Android 12+ launch splash intentionally has no app icon or branding image. -->
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/splash_empty</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="31">@android:color/transparent</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="31">@drawable/splash_empty</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">?attr/colorSurface</item>
+    </style>
+</resources>
+

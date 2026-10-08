@@ -1,0 +1,332 @@
+package com.elitedarkkaiser.redmagic
+
+import android.app.AlertDialog
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.view.Gravity
+import android.view.View
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.elitedarkkaiser.redmagic.ui.ValueButtonGroup
+import com.elitedarkkaiser.redmagic.ui.hostComposeFrom
+
+internal object ShoulderLedDialogUi {
+
+    data class Deps(
+        val textPrimary: Int,
+        val textSecondary: Int,
+        val panelColor: Int,
+        val borderColor: Int,
+        val panelPressed: Int,
+        val accent: Int,
+        val typeface: Typeface?,
+        val dp: (Int) -> Int,
+        val roundedBg: (Int, Int, Int) -> Drawable,
+        val roundedFill: (Int, Int) -> Drawable,
+        val space: (Int) -> View,
+        val colorDotGeneric: (String, Boolean, () -> Unit) -> View,
+        val colorDotDrawable: (String, Boolean) -> Drawable
+    )
+
+    fun showShoulderLedDialog(
+        activity: MainActivity,
+        originalEnabled: Boolean,
+        originalEffect: String,
+        originalColor: Int,
+        currentEnabled: () -> Boolean,
+        currentEffect: () -> String,
+        currentColor: () -> Int,
+        setEnabled: (Boolean) -> Unit,
+        setEffect: (String) -> Unit,
+        setColor: (Int) -> Unit,
+        applyPreviewIfEnabled: () -> Unit,
+        applyEffect: (String, Int) -> Unit,
+        disableLed: () -> Unit,
+        saveState: () -> Unit,
+        startFanLedService: () -> Unit,
+        stopFanLedService: () -> Unit,
+        anyLedEnabled: () -> Boolean,
+        setDialogRefresh: (((() -> Unit)?) -> Unit),
+        deps: Deps
+    ) {
+        var dialogRefresh: (() -> Unit)? = null
+
+        val container = LinearLayout(activity).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(deps.dp(22), deps.dp(18), deps.dp(22), deps.dp(12))
+            background = deps.roundedBg(deps.panelColor, deps.borderColor, 22)
+        }
+
+        val titleView = TextView(activity).apply {
+            text = "Shoulder LEDs"
+            textSize = 20f
+            setTextColor(deps.textPrimary)
+            setTypeface(deps.typeface, Typeface.BOLD)
+        }
+
+        val subtitleView = TextView(activity).apply {
+            text = "Customize shoulder LED strips with instant preview"
+            textSize = 13f
+            setTextColor(deps.textSecondary)
+            setPadding(0, deps.dp(8), 0, 0)
+        }
+
+        val enableCheck = CheckBox(activity).apply {
+            text = "Enable shoulder LEDs"
+            isChecked = currentEnabled()
+            textSize = 14f
+            setTextColor(deps.textPrimary)
+            buttonTintList = ColorStateList.valueOf(deps.accent)
+            setPadding(0, deps.dp(14), 0, 0)
+            setOnCheckedChangeListener { _, checked ->
+                ShoulderLedActions.setPreviewEnabled(
+                    enabled = checked,
+                    onEnabledChanged = setEnabled,
+                    applyEffect = applyEffect,
+                    disableLed = disableLed,
+                    currentEffect = currentEffect,
+                    currentColor = currentColor
+                )
+            }
+        }
+
+        val effectLabel = TextView(activity).apply {
+            text = "Effect"
+            textSize = 12f
+            setTextColor(deps.textSecondary)
+            setPadding(0, deps.dp(16), 0, deps.dp(8))
+        }
+
+        val effectsGroup = ValueButtonGroup(
+            activity,
+            listOf("Steady" to "steady", "Breathe" to "breathe", "Flashing" to "flashing"),
+            currentEffect()
+        ) { value ->
+            ShoulderLedActions.setPreviewEffect(
+                effect = value,
+                onEffectChanged = setEffect,
+                applyPreviewIfEnabled = applyPreviewIfEnabled,
+                refreshDialog = { dialogRefresh?.invoke() }
+            )
+        }
+
+        val effectsRow = effectsGroup.view
+
+        val colorLabel = TextView(activity).apply {
+            text = "Color"
+            textSize = 12f
+            setTextColor(deps.textSecondary)
+            setPadding(0, deps.dp(16), 0, deps.dp(10))
+        }
+
+        val colorRow = LinearLayout(activity).apply {
+            orientation = LinearLayout.HORIZONTAL
+            addView(deps.colorDotGeneric("#FF0000", currentColor() == 1) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 1,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#FF8C00", currentColor() == 3) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 3,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#FFD600", currentColor() == 4) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 4,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#00E676", currentColor() == 5) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 5,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+        }
+
+        val colorRow2 = LinearLayout(activity).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, deps.dp(10), 0, 0)
+            addView(deps.colorDotGeneric("#00E5FF", currentColor() == 6) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 6,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#1565FF", currentColor() == 7) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 7,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#A020F0", currentColor() == 8) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 8,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+            addView(deps.space(deps.dp(10)))
+            addView(deps.colorDotGeneric("#FF69B4", currentColor() == 9) {
+                ShoulderLedActions.setPreviewColor(
+                    color = 9,
+                    onColorChanged = setColor,
+                    applyPreviewIfEnabled = applyPreviewIfEnabled,
+                    refreshDialog = { dialogRefresh?.invoke() }
+                )
+            })
+        }
+
+        val buttonRow = LinearLayout(activity).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.END
+            setPadding(0, deps.dp(18), 0, 0)
+        }
+
+        val cancelBtn = Button(activity).apply {
+            text = "Cancel"
+            textSize = 13f
+            isAllCaps = false
+            setTextColor(deps.textPrimary)
+            background = deps.roundedFill(Color.parseColor("#1E2633"), 14)
+            setPadding(deps.dp(18), deps.dp(10), deps.dp(18), deps.dp(10))
+        }
+
+        val saveBtn = Button(activity).apply {
+            text = "Save"
+            textSize = 13f
+            isAllCaps = false
+            setTextColor(deps.textPrimary)
+            background = deps.roundedFill(deps.panelPressed, 14)
+            setPadding(deps.dp(20), deps.dp(10), deps.dp(20), deps.dp(10))
+        }
+
+        buttonRow.addView(cancelBtn)
+        buttonRow.addView(deps.space(deps.dp(10)))
+        buttonRow.addView(saveBtn)
+
+        container.addView(titleView)
+        container.addView(subtitleView)
+        container.addView(enableCheck)
+        container.addView(effectLabel)
+        container.addView(effectsRow)
+        container.addView(colorLabel)
+        container.addView(colorRow)
+        container.addView(colorRow2)
+        container.addView(buttonRow)
+
+        // These two still use the framework AlertDialog rather than M3Dialog's sheet, so the
+        // button group's ComposeView has to be given the activity's owners by hand.
+        container.hostComposeFrom(activity)
+
+        val dialog = AlertDialog.Builder(activity)
+            .setView(container)
+            .setCancelable(true)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(
+            android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)
+        )
+
+        fun repaint() {
+            effectsGroup.value = currentEffect()
+        }
+
+        fun updateColorDots() {
+            colorRow.getChildAt(0).background = deps.colorDotDrawable("#FF0000", currentColor() == 1)
+            colorRow.getChildAt(2).background = deps.colorDotDrawable("#FF8C00", currentColor() == 3)
+            colorRow.getChildAt(4).background = deps.colorDotDrawable("#FFD600", currentColor() == 4)
+            colorRow.getChildAt(6).background = deps.colorDotDrawable("#00E676", currentColor() == 5)
+
+            colorRow2.getChildAt(0).background = deps.colorDotDrawable("#00E5FF", currentColor() == 6)
+            colorRow2.getChildAt(2).background = deps.colorDotDrawable("#1565FF", currentColor() == 7)
+            colorRow2.getChildAt(4).background = deps.colorDotDrawable("#A020F0", currentColor() == 8)
+            colorRow2.getChildAt(6).background = deps.colorDotDrawable("#FF69B4", currentColor() == 9)
+        }
+
+        fun refreshUi() {
+            repaint()
+            updateColorDots()
+        }
+
+        dialogRefresh = { refreshUi() }
+        setDialogRefresh(dialogRefresh)
+
+        cancelBtn.setOnClickListener {
+            ShoulderLedActions.restoreOriginalState(
+                originalEnabled = originalEnabled,
+                originalEffect = originalEffect,
+                originalColor = originalColor,
+                setEnabled = setEnabled,
+                setEffect = setEffect,
+                setColor = setColor,
+                applyEffect = applyEffect,
+                disableLed = disableLed
+            )
+            dialog.dismiss()
+        }
+
+        saveBtn.setOnClickListener {
+            ShoulderLedActions.commitState(
+                enabled = currentEnabled(),
+                effect = currentEffect(),
+                color = currentColor(),
+                saveState = saveState,
+                applyEffect = applyEffect,
+                disableLed = disableLed,
+                startFanLedService = startFanLedService,
+                stopFanLedService = stopFanLedService,
+                anyLedEnabled = anyLedEnabled
+            )
+            dialog.dismiss()
+        }
+
+        dialog.setOnCancelListener {
+            ShoulderLedActions.restoreOriginalState(
+                originalEnabled = originalEnabled,
+                originalEffect = originalEffect,
+                originalColor = originalColor,
+                setEnabled = setEnabled,
+                setEffect = setEffect,
+                setColor = setColor,
+                applyEffect = applyEffect,
+                disableLed = disableLed
+            )
+        }
+
+        refreshUi()
+        dialog.show()
+
+        dialog.window?.apply {
+            setBackgroundDrawable(
+                android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)
+            )
+            setDimAmount(0.65f)
+        }
+    }
+}

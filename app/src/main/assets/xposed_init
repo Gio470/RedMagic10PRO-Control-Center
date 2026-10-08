@@ -1,0 +1,4 @@
+com.elitedarkkaiser.redmagic.xposed.WindowModHooks
+com.elitedarkkaiser.redmagic.xposed.GameAssistHooks
+com.elitedarkkaiser.redmagic.xposed.IconPackHooks
+com.elitedarkkaiser.redmagic.xposed.SoftwareControlsHooks

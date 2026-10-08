@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The artwork, recoloured from the user's wallpaper palette.
+
+  A single tint over the whole bitmap would flatten the robot, the shield and the
+  crest into one silhouette, so the artwork ships as one alpha mask per colour
+  role and each mask is tinted separately. The roles are mapped by *value*, not
+  by hue: the outline stays the lightest thing, the panel behind the crest stays
+  the darkest, and the shield sits between the outline and the robot. That is
+  what keeps the mark readable whatever palette the wallpaper produces.
+
+  system_* are public framework colours (API 31+) resolved by whoever inflates
+  the icon, which is how the launcher gets the current palette.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap android:src="@mipmap/ic_launcher_panel"
+            android:tint="@android:color/system_neutral1_900" />
+    </item>
+    <item>
+        <bitmap android:src="@mipmap/ic_launcher_shield"
+            android:tint="@android:color/system_accent1_200" />
+    </item>
+    <item>
+        <bitmap android:src="@mipmap/ic_launcher_robot"
+            android:tint="@android:color/system_accent1_400" />
+    </item>
+    <item>
+        <bitmap android:src="@mipmap/ic_launcher_outline"
+            android:tint="@android:color/system_accent1_50" />
+    </item>
+    <item>
+        <bitmap android:src="@mipmap/ic_launcher_crest"
+            android:tint="@android:color/system_accent3_300" />
+    </item>
+</layer-list>

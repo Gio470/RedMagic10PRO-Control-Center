@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launcher background below API 31, where there is no wallpaper-derived
+         palette to draw from. Near-black, matching the artwork's own backdrop. -->
+    <color name="ic_launcher_background">#0B0B0F</color>
+</resources>

@@ -1,0 +1,55 @@
+# Gradle / Build
+.gradle/
+build/
+**/build/
+out/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+local.properties
+
+# Compiled
+*.class
+*.kotlin_module
+
+# APK / outputs
+*.apk
+*.ap_
+*.aab
+outputs/
+captures/
+
+# Native
+.cxx/
+externalNativeBuild/
+
+# Logs
+*.log
+logs/
+
+# Temp / backups (important)
+*.bak
+*.bak.*
+*.tmp
+*.swp
+*~
+
+# Archives
+*.zip
+*.tar
+*.gz
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Signing
+*.jks
+*.keystore
+*.pem
+*.key
+
+# Generated
+bin/
+gen/

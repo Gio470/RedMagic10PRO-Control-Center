@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Foreground below API 31: the artwork in its own colours. There is no
+  wallpaper-derived palette to tint from on these versions, so nothing to do.
+  drawable-v31 replaces this with the dynamically tinted build.
+-->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@mipmap/ic_launcher_foreground" />

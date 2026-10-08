@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:id="@+id/tvFanLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fan level: 0" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/seekFanLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:valueFrom="0"
+            android:valueTo="5"
+            android:stepSize="1"
+            android:value="0" />
+
+        <Button android:id="@+id/btnCheckRoot" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Check root" />
+        <Button android:id="@+id/btnFanOn" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fan on" />
+        <Button android:id="@+id/btnFanOff" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fan off" />
+        <Button android:id="@+id/btnReadRpm" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Read RPM" />
+        <Button android:id="@+id/btnPumpOn" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Pump on" />
+        <Button android:id="@+id/btnPumpOff" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Pump off" />
+        <Button android:id="@+id/btnLedPurple" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="All LEDs purple breathing" />
+        <Button android:id="@+id/btnLedRed" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Logo red static" />
+        <Button android:id="@+id/btnLedOff" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LEDs off" />
+        <Button android:id="@+id/btnEnableTriggers" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Enable triggers" />
+        <Button android:id="@+id/btnDisableTriggers" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Disable triggers" />
+        <Button android:id="@+id/btnSliderApp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Set slider to launch this app" />
+        <Button android:id="@+id/btnSliderRaw" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Disable slider system handling" />
+        <Button android:id="@+id/btnVibrate" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Test haptic" />
+
+    </LinearLayout>
+</ScrollView>
