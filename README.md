@@ -70,25 +70,29 @@ Everything this app changes about *other* software.
 - **Floating window tweaks** — allow any app in a floating window, keep minimised windows usable,
   keep windows where you drop them, allow them off screen, stop drag-to-split, and set your own
   window limit
-- **Global icon pack** — apply an icon pack everywhere, with a monochrome fallback
+- **Global icon pack** — apply an icon pack everywhere, with a monochrome fallback; a separate
+  root-only switch next to it flips the launcher's own mono-icon mode
 - **GameAssist / GameSpace** — global Game Mode, hide the Energy Cube, Super Resolution, and more
+- **Volume Step Control** — change media volume by more than one level per button press
+- **Launcher recents** — hide a third-party launcher's HOME card from recents, and set it as the
+  Home app for gesture navigation
 
 **Needs only root:**
 
+- **System theme** — recolours the whole phone's Material You palette from a picked colour or the
+  wallpaper, ported from ColorBlendr
+- **Performance mods** — a cache cleaner and a GMS Optimizer toggle for Google Play Services
 - **Block system updates** — switches off ZTE's ZDM updater stack. An OTA replaces the boot image
   and takes root with it
-- **De-Bloat** — every preinstalled app with the Universal Android Debloater rating and description
-  for it, searchable and filterable by risk. Disables with `pm disable-user` rather than masking
-  the APK, so it takes effect immediately, reverses cleanly, and cannot leave the system partition
-  in a state a reboot won't fix
-- **Processes** — every running process with live CPU and memory, filterable and sortable, with
-  force-stop and kill
 
 ### Settings
 
-Theme mode, Material You dynamic colour, pure black, the liquid-glass bottom bar, background
-animations, °C/°F, and three separate refresh intervals (hardware status, processor, memory) since
-they cost very different amounts to poll.
+Theme mode, Material You dynamic colour (or a picked seed colour), pure black, docked vs. floating
+navigation bar, the liquid-glass bottom bar with a live **Glass playground** to tune its blur,
+tint, refraction and depth by eye, card appearance (a blur-behind-cards slider and a toggle to
+connect each group of settings into one continuous card), background animations, °C/°F, and three
+separate refresh intervals (hardware status, processor, memory) since they cost very different
+amounts to poll.
 
 **Diagnostics** lives here too: a crash report and a log of every hardware write with the call stack
 behind it, both copyable to the clipboard without adb or a terminal on the phone.
@@ -101,7 +105,7 @@ Root alone cannot reach inside other apps, so the floating-window patches, the i
 GameAssist tweaks run as an LSPosed module shipped inside this same APK.
 
 1. Install the app
-2. Enable **RedMagic Control** in LSPosed
+2. Enable **Redmagic Control Center** in LSPosed
 3. Leave the default scope — it already asks for System Framework, the launcher, SystemUI and
    Settings
 4. **Reboot** — hooks are installed once at boot and cannot be added later
@@ -134,6 +138,10 @@ zipalign -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk aligned.
 apksigner sign --ks <your.keystore> --out RedMagicControl.apk aligned.apk
 ```
 
+`assembleRelease` signs automatically instead when `SIGNING_STORE_FILE`, `SIGNING_STORE_PASSWORD`,
+`SIGNING_KEY_ALIAS` and `SIGNING_KEY_PASSWORD` are set. CI uses exactly this: pushing a `vX.Y.Z` tag
+builds a signed release APK from those same secrets and attaches it to a GitHub Release automatically.
+
 The Kotlin namespace is `com.elitedarkkaiser.redmagic` while the application id is
 `com.redmagic.control`. That is deliberate: the namespace is where every source file lives and what
 `R` and `BuildConfig` generate into, and it has no bearing on what the package manager calls the app.
@@ -156,8 +164,8 @@ This app stands on a lot of other people's work.
 | [austineyoung2000/Redmagic-11-Toolbox](https://github.com/austineyoung2000/Redmagic-11-Toolbox) | Native Touch-Game-Key mapping, profile storage, and documented vendor behavior; firmware transaction IDs are discovered on the installed phone |
 | [Gio470/FixRedMagicWindow](https://github.com/Gio470/FixRedMagicWindow) | The floating-window hooks |
 | [RichardLuo0/global-icon-pack-android](https://github.com/RichardLuo0/global-icon-pack-android) | The global icon pack, id-rewriting trick and all |
-| [RohitKushvaha01/TaskManager](https://github.com/RohitKushvaha01/TaskManager) | The processor, memory and running-process readings |
-| [sunilpaulmathew/de-bloater](https://github.com/sunilpaulmathew/de-bloater) | De-Bloat, and the Universal Android Debloater list it reads |
+| [RohitKushvaha01/TaskManager](https://github.com/RohitKushvaha01/TaskManager) | The processor and memory readings |
+| [Mahmud0808/ColorBlendr](https://github.com/Mahmud0808/ColorBlendr) | System theme's Material You recolouring |
 | [khanhnguyen9872/NubiaToolkit](https://github.com/khanhnguyen9872/NubiaToolkit) | Hardware node reference |
 | [Gio470/NPatch](https://github.com/Gio470/NPatch) · [MorpheApp/morphe-manager](https://github.com/MorpheApp/morphe-manager) · [alesimula/Murine-launcher](https://github.com/alesimula/Murine-launcher) | UI patterns the screens are modelled on |
 | [Font Awesome Free](https://github.com/FortAwesome/Font-Awesome) | Every icon in the app. Icons CC BY 4.0, font SIL OFL 1.1 — full licence ships in the APK's assets |
