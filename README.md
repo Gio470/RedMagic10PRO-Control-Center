@@ -40,6 +40,10 @@ Each section has its own master switch and folds away when off.
 | **Charging mode** | Fan and LED behaviour while plugged in |
 | **Display density** | Screen density override |
 
+## Hardware Preview
+
+![Preview](./Screenshot_20261009_180315.jpg)
+
 ### Software
 Everything this app changes about *other* software.
 
