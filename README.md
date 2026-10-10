@@ -62,6 +62,10 @@ Theme mode, Material You colour, pure black, docked vs. floating nav bar, a **Gl
 to tune the bottom bar's blur/tint/depth, card appearance (blur + connect toggle), background
 animations, °C/°F, per-feature refresh intervals, and a diagnostics log.
 
+## Settings Preview
+
+![Preview](./Screenrecorder-20260831-085511-ezgif.com-video-to-gif-converter.gif)
+
 ---
 
 ## 🧩 The Xposed module
