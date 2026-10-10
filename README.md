@@ -76,13 +76,9 @@ animations, °C/°F, per-feature refresh intervals, and a diagnostics log.
 
 Home's status strip reports whether the module loaded *this* boot.
 
----
+## Xposed Preview
 
-## 🔨 Building
-
-```bash
-./gradlew :app:assembleRelease
-```
+![Preview](./Screenshot_20261009_181812.jpg)
 
 ---
 
