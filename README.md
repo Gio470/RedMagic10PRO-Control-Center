@@ -2,13 +2,6 @@
 
 Root hardware and system control for the **RedMagic 10 Pro (NX789J)** running RedMagicOS.
 
-| | |
-|---|---|
-| **Package** | `com.redmagic.control` |
-| **Version** | 1.0.0 (1) |
-| **Min Android** | 9 (API 28) · built against API 36 |
-| **Needs** | Root (Magisk / KernelSU). LSPosed is optional — see below. |
-
 ---
 
 ## ⚠️ Before you start
@@ -74,10 +67,6 @@ Home's status strip reports whether the module loaded *this* boot.
 ```bash
 ./gradlew :app:assembleRelease
 ```
-
-Signs automatically when `SIGNING_STORE_FILE`, `SIGNING_STORE_PASSWORD`, `SIGNING_KEY_ALIAS` and
-`SIGNING_KEY_PASSWORD` are set — CI does exactly this on a `vX.Y.Z` tag push and attaches the
-signed APK to a GitHub Release.
 
 ---
 
