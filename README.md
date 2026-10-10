@@ -53,6 +53,10 @@ mono-icon switch), GameAssist/GameSpace tweaks, Volume Step Control, Launcher re
 **Needs only root** — System theme (recolours the whole phone's Material You palette, ported
 from ColorBlendr), Performance mods (cache cleaner + GMS Optimizer), Block system updates.
 
+## Software Preview
+
+![Preview](./Screenshot_20261009_180326.jpg)
+
 ### Settings
 Theme mode, Material You colour, pure black, docked vs. floating nav bar, a **Glass playground**
 to tune the bottom bar's blur/tint/depth, card appearance (blur + connect toggle), background
