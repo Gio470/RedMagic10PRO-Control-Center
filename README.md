@@ -64,7 +64,7 @@ animations, °C/°F, per-feature refresh intervals, and a diagnostics log.
 
 ## Settings Preview
 
-![Preview](./Screenrecorder-20260831-085511-ezgif.com-video-to-gif-converter.gif)
+![Preview](./Screenshot_20261009_181304.jpg)
 
 ---
 
