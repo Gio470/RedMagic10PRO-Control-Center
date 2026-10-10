@@ -20,6 +20,10 @@ app — uninstalling doesn't undo them. Use the app's own switches to revert ins
 A live dashboard: status strip (phone model, root, Xposed module), temperature and fan dials,
 processor load graph, memory.
 
+## Home Preview
+
+![Preview](./Screenshot_20261009_180302.jpg)
+
 ### Hardware
 Each section has its own master switch and folds away when off.
 
